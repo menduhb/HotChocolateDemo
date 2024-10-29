@@ -13,24 +13,22 @@ namespace HotChocolateDemo.Repository
             _contextFactory = contextFactory;
         }
 
-        public IQueryable<CourseDTO> GetAll1()
+        public IQueryable<CourseDTO> GetAllQueryable()
         {
-            using (SchoolDbContext context = _contextFactory.CreateDbContext())
-            {
-                var coruse = context.Courses;
-                return coruse;
-            }
+            var context = _contextFactory.CreateDbContext(); // No using statement here, leave it open 
+                var course = context.Courses;
+                return course; 
         }
 
         public async Task<List<CourseDTO>> GetAll()
         {
             using (SchoolDbContext context = _contextFactory.CreateDbContext())
             {
-                var coruse = await context.Courses
+                var course = await context.Courses
                     .Include(x => x.Instructor)
                     .Include(x => x.Students)
                     .ToListAsync();
-                return coruse;
+                return course;
             }
         }
 
@@ -38,11 +36,11 @@ namespace HotChocolateDemo.Repository
         {
             using (SchoolDbContext context = _contextFactory.CreateDbContext())
             {
-                var coruse = await context.Courses
+                var course = await context.Courses
                     .Include(x => x.Instructor)
                     .Include(x => x.Students)
                     .FirstOrDefaultAsync(x => x.Id == courseId);
-                return coruse;
+                return course;
             }
         }
 
@@ -51,11 +49,11 @@ namespace HotChocolateDemo.Repository
         {
             using (SchoolDbContext context = _contextFactory.CreateDbContext())
             {
-                var coruse = await context.Courses
+                var course = await context.Courses
                     .Include(x => x.Instructor)
                     .Include(x => x.Students)
                     .FirstOrDefaultAsync(x => x.Name.ToLower() == coruseName.ToLower());
-                return coruse;
+                return course;
             }
         }
         public async Task<CourseDTO> Create(CourseDTO course)
@@ -97,9 +95,9 @@ namespace HotChocolateDemo.Repository
         {
             using (SchoolDbContext context = _contextFactory.CreateDbContext())
             {
-                var coruse = await context.Courses
+                var course = await context.Courses
                     .FirstOrDefaultAsync(x => x.Id == courseId);
-                return coruse != null;
+                return course != null;
             }
         }
     }

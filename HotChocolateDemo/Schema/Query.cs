@@ -6,37 +6,29 @@ using System.Collections.Generic;
 using HotChocolate.Data;
 using HotChocolate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace HotChocolateDemo.Schema
 {
     public class Query
     {
         private readonly CourseRepository _courseRepository;
-        private readonly IDbContextFactory<SchoolDbContext> _contextFactory;
 
-        public Query(CourseRepository coruse, IDbContextFactory<SchoolDbContext> contextFactory)
+        public Query(CourseRepository _course)
         {
-            _contextFactory = contextFactory;
-            _courseRepository = coruse;
+            _courseRepository = _course;
         }
          
         [UseFiltering]
-        public IEnumerable<CourseType> GetAllFilter()
+        public IQueryable<CourseType> GetAllCoursesWithFilter()
         {
-            
-            using (SchoolDbContext context = _contextFactory.CreateDbContext())
+            return _courseRepository.GetAllQueryable().Select(x => new CourseType()
             {
-                var a= context.Courses.Select(x => new CourseType()
-                {
-                    Id = x.Id,
-                    Subject = x.Subject,
-                    InstructorId = x.InstructorId,
-                    Name = x.Name
-                });
-
-                return a.ToList();
-            }
-             
+                Id = x.Id,
+                Subject = x.Subject,
+                InstructorId = x.InstructorId,
+                Name = x.Name
+            });
         }
 
         public async Task<IEnumerable<CourseType>> GetCourses()
