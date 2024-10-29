@@ -13,6 +13,7 @@ builder.Services.AddGraphQLServer()
     .AddMutationType<Mutation>()
     //.AddSubscriptionType<Subscription>()
     .AddFiltering()
+    .AddSorting()
     ;
 
 
@@ -20,14 +21,8 @@ builder.Services.AddPooledDbContextFactory<SchoolDbContext>(c =>
 c.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-//builder.Services.AddDbContext<SchoolDbContext>(c =>
-//    c.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
-
 builder.Services.AddScoped<CourseRepository>();
 builder.Services.AddScoped<InstructorRepository>();
-
 builder.Services.AddScoped<InstructorDataLoader>();
 
 
@@ -44,8 +39,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseWebSockets();
-app.MapGraphQL();
-app.MapControllers();
 
+app.MapGraphQL();
+
+app.MapControllers();
 
 app.Run();

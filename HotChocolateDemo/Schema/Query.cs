@@ -5,6 +5,7 @@ using HotChocolateDemo.Services;
 using System.Collections.Generic;
 using HotChocolate.Data;
 using HotChocolate;
+using HotChocolateDemo.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -19,7 +20,8 @@ namespace HotChocolateDemo.Schema
             _courseRepository = _course;
         }
          
-        [UseFiltering]
+        [UseFiltering(typeof(CourseFilterType))]
+        [UseSorting]
         public IQueryable<CourseType> GetAllCoursesWithFilter()
         {
             return _courseRepository.GetAllQueryable().Select(x => new CourseType()
