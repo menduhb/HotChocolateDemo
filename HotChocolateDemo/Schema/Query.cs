@@ -19,12 +19,14 @@ namespace HotChocolateDemo.Schema
         {
             _courseRepository = _course;
         }
-         
+
+        [UseProjection]
         [UseFiltering(typeof(CourseFilterType))]
         [UseSorting]
         public IQueryable<CourseType> GetAllCoursesWithFilter()
         {
-            return _courseRepository.GetAllQueryable().Select(x => new CourseType()
+            var courseDtos = _courseRepository.GetAllQueryable();
+            return courseDtos.Select(x => new CourseType()
             {
                 Id = x.Id,
                 Subject = x.Subject,

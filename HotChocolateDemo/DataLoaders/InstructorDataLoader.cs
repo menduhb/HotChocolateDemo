@@ -14,9 +14,9 @@ namespace HotChocolateDemo.DataLoaders
 
         protected override async Task<IReadOnlyDictionary<Guid, InstructorDTO>> LoadBatchAsync(IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
         {
-            IEnumerable<InstructorDTO> insiInstructor = await _instructorRepository.GetManyByIds(keys);
+            IEnumerable<InstructorDTO> instructor = await _instructorRepository.GetManyByIds(keys);
 
-            return insiInstructor.ToDictionary(x => x.Id);
+            return instructor.ToDictionary(x => x.Id);
         }
     }
 }
